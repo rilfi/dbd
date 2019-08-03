@@ -1,0 +1,10 @@
+df1 = sql.createDataFrame([("Mark", 68), ("John", 59), ("Mary", 49)], ['Name', \
+'Weight'])
+
+df2 = sql.createDataFrame([(31, "Mark"), (32, "Mark"), (41, "John"), (42, "John\
+"), (43, "John")],[ 'Age', 'Name'])
+
+grouped = df2.groupBy(['Name']).agg(collect_list("Age").alias('age_list'))
+
+joined_df = df1.join(grouped, df1.Name == grouped.Name, 'left_outer')
+print(joined_df.select(grouped.age_list, df1.Name, df1.Weight).collect())
